@@ -1,0 +1,12 @@
+build/
+**/_build/
+**/__pycache__/
+**/.ipynb_checkpoints/
+**/.jupyter_cache/
+
+# Executed notebook outputs the build script regenerates from _py/*.md.
+**/figures/
+**/txt/
+
+*.pyc
+.DS_Store

@@ -1,0 +1,48 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# Introduction
+
+In this section we introduce a number of approaches and techniques that
+are commonly used in spatial data analysis and modelling.
+
+Spatial data are mostly like other data. The same general principles
+apply. But there are a few things that are rather important to consider
+when using spatial data that are not common with other data types.
+These are discussed in Chapters 2 and 3 and include issues of scale and
+zonation (the modifiable areal unit problem), distance and spatial
+autocorrelation.
+
+The other chapters introduce methods in different areas of spatial data
+analysis. These include the three classical areas of spatial statistics
+— point pattern analysis, regression and inference with spatial data,
+and geostatistics (interpolation using Kriging) — as well as some other
+methods (local and global regression and classification with spatial
+data).
+
+Some of the material presented here is based on examples in the book
+[*Geographic Information Analysis*](https://www.wiley.com/en-us/Geographic+Information+Analysis%2C+2nd+Edition-p-9780470288573)
+by David O'Sullivan and David J. Unwin. This book provides an excellent
+and very accessible introduction to spatial data analysis. It has much
+more depth than what we present here. But the book does not show how to
+practically implement the approaches that are discussed — which is the
+main purpose of this website.
+
+The spatial statistical methods are treated in much more detail in
+[*Applied Spatial Data Analysis with R*](http://www.asdar-book.org/)
+by Bivand, Pebesma and Gómez-Rubio. The methods themselves carry over
+directly; here we use the *Python* `tappa` package (with `numpy`,
+`pandas`, `scipy`, and `scikit-learn` for the statistical heavy
+lifting) instead of the *R* packages discussed there.
+
+This section builds on our
+[Introduction to Spatial Data Manipulation with Python](../spatial/index),
+which you should read first.

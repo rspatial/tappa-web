@@ -1,0 +1,8 @@
+.wy-side-nav-search, .wy-nav-top {
+    background: #2980B9;
+}
+
+/* MyST-NB output blocks: keep them readable on narrow pages */
+div.cell_output {
+    overflow-x: auto;
+}
