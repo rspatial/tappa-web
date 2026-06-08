@@ -130,7 +130,7 @@ Build a regular grid of fit-points covering the counties.
 ```{code-cell} python
 r  = pt.rast(ctst, resolution=10000)
 ca = pt.rasterize(ctst, r)
-fit_xy = pt.crds(pt.asPoints(ca))
+fit_xy = pt.crds(pt.as_points(ca))
 print("fit points:", fit_xy.shape)
 ```
 
@@ -156,10 +156,10 @@ slp = np.full(int(pt.ncell(ca)), np.nan, dtype=np.float32)
 icp[mask] = intercept_v.astype(np.float32)
 slp[mask] = slope_v.astype(np.float32)
 
-intercept_r = pt.setValues(intercept_r, icp)
-slope_r     = pt.setValues(slope_r, slp)
+intercept_r = pt.set_values(intercept_r, icp)
+slope_r     = pt.set_values(slope_r, slp)
 s = pt.rast([intercept_r, slope_r])
-s = pt.setNamesRast(s, ["intercept", "slope"])
+s = pt.set_names(s, ["intercept", "slope"])
 pt.plot(s, figsize=(8, 4));
 ```
 
@@ -283,7 +283,7 @@ There is clearly variation in the coefficient β for income. Map the
 results.
 
 ```{code-cell} python
-dcounties = pt.aggregateVect(counties, by="NAME")
+dcounties = pt.aggregate(counties, by="NAME")
 print("counties:", counties.nrow(), " dissolved:", dcounties.nrow())
 ```
 
@@ -291,7 +291,7 @@ Merge the county geometry with the regression-coefficient data
 frame.
 
 ```{code-cell} python
-cnty_df = pt.vectAsDF(dcounties).reset_index().rename(
+cnty_df = pt.vect_as_df(dcounties).reset_index().rename(
     columns={"index": "_row"})
 joined = cnty_df.merge(resdf.reset_index().rename(
     columns={"index": "NAME"}), on="NAME", how="left")
@@ -309,13 +309,13 @@ Is there spatial autocorrelation in the coefficients?
 
 ```{code-cell} python
 lw = pt.adjacent(cnres, type="rook", pairs=False).astype(int)
-inc_vals = pt.vectAsDF(cnres)["income"].to_numpy()
+inc_vals = pt.vect_as_df(cnres)["income"].to_numpy()
 mask = ~np.isnan(inc_vals)
 print("Moran's I (income):",
       round(float(pt.autocor(inc_vals[mask], lw[mask][:, mask],
                              method="moran")), 4))
 
-age_vals = pt.vectAsDF(cnres)["houseAge"].to_numpy()
+age_vals = pt.vect_as_df(cnres)["houseAge"].to_numpy()
 mask = ~np.isnan(age_vals)
 print("Moran's I (houseAge):",
       round(float(pt.autocor(age_vals[mask], lw[mask][:, mask],
@@ -333,7 +333,7 @@ TA = ("+proj=aea +lat_1=34 +lat_2=40.5 +lat_0=0 +lon_0=-120 "
       "+x_0=0 +y_0=-4000000 +datum=WGS84 +units=m")
 countiesTA = counties.project(TA)
 r = pt.rast(countiesTA, resolution=50000)
-xy = pt.xyFromCell(r, np.arange(pt.ncell(r)))
+xy = pt.xy_from_cell(r, np.arange(pt.ncell(r)))
 ```
 
 ```{code-cell} python
@@ -367,7 +367,7 @@ for i, target in enumerate(xy):
 ```
 
 ```{code-cell} python
-rinc = pt.setValues(pt.deepcopy(r), income_grid.astype(np.float32))
+rinc = pt.set_values(pt.deepcopy(r), income_grid.astype(np.float32))
 ax = pt.plot(rinc, figsize=(6, 6))
 pt.lines(countiesTA, ax=ax);
 ```

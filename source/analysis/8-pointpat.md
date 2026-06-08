@@ -39,7 +39,7 @@ pt.points(crime, ax=ax, color="red", s=4, marker="+");
 A sorted table of the incidence of crime types.
 
 ```{code-cell} python
-crime_df = pt.vectAsDF(crime)
+crime_df = pt.vect_as_df(crime)
 tb = crime_df["CATEGORY"].value_counts(dropna=True).sort_values()
 tb
 ```
@@ -218,7 +218,7 @@ The *F* function is computed from raster cell centres.
 ```{code-cell} python
 from scipy.spatial.distance import cdist
 
-p_xy = pt.crds(pt.asPoints(r))
+p_xy = pt.crds(pt.as_points(r))
 d2 = cdist(p_xy, xy)
 mind = d2.min(axis=1)
 

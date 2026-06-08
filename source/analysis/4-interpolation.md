@@ -136,7 +136,7 @@ for k in range(5):
     train = dta[kf != k]
     vk    = pt.voronoi(train)
     p     = pt.extract(vk, test)
-    rmses.append(rmse(pt.vectAsDF(test)["prec"], p["prec"]))
+    rmses.append(rmse(pt.vect_as_df(test)["prec"], p["prec"]))
 
 rmses = np.array(rmses)
 print("rmse per fold:", rmses.round(2))
@@ -166,7 +166,7 @@ centre of `r`.
 from scipy.spatial import cKDTree
 
 xy = pt.crds(dta)
-y  = pt.vectAsDF(dta)["prec"].to_numpy()
+y  = pt.vect_as_df(dta)["prec"].to_numpy()
 tree = cKDTree(xy)
 
 
@@ -181,9 +181,9 @@ def knn_predict(target_xy, k, idp=0.0):
     return (w * y[idx]).sum(axis=1) / w.sum(axis=1)
 
 
-cell_xy = pt.xyFromCell(r, np.arange(pt.ncell(r)))
+cell_xy = pt.xy_from_cell(r, np.arange(pt.ncell(r)))
 nn_vals = knn_predict(cell_xy, k=5, idp=0.0)
-nn = pt.setValues(pt.deepcopy(r), nn_vals.astype(np.float32))
+nn = pt.set_values(pt.deepcopy(r), nn_vals.astype(np.float32))
 nnmsk = pt.mask(nn, vr)
 pt.plot(nnmsk, figsize=(5, 5));
 ```
@@ -217,7 +217,7 @@ value at a location.
 
 ```{code-cell} python
 idw_vals = knn_predict(cell_xy, k=len(y), idp=2.0)
-idwr = pt.setValues(pt.deepcopy(r), idw_vals.astype(np.float32))
+idwr = pt.set_values(pt.deepcopy(r), idw_vals.astype(np.float32))
 idwr = pt.mask(idwr, vr)
 pt.plot(idwr, figsize=(5, 5));
 ```
@@ -278,7 +278,7 @@ aq_v = aq_v.project(TAkm)
 ca   = CA.project(TAkm)
 
 xy_aq = pt.crds(aq_v)
-oz    = pt.vectAsDF(aq_v)["OZDLYAV"].to_numpy()
+oz    = pt.vect_as_df(aq_v)["OZDLYAV"].to_numpy()
 xy_aq.shape, oz.shape
 ```
 
@@ -323,15 +323,15 @@ ax.legend();
 Predict on the raster grid.
 
 ```{code-cell} python
-cell_xy = pt.xyFromCell(r, np.arange(pt.ncell(r)))
+cell_xy = pt.xy_from_cell(r, np.arange(pt.ncell(r)))
 pred, var = OK.execute("points", cell_xy[:, 0], cell_xy[:, 1])
 
-ok_pred = pt.setValues(pt.deepcopy(r), np.asarray(pred,
+ok_pred = pt.set_values(pt.deepcopy(r), np.asarray(pred,
                        dtype=np.float32))
-ok_var  = pt.setValues(pt.deepcopy(r), np.asarray(var,
+ok_var  = pt.set_values(pt.deepcopy(r), np.asarray(var,
                        dtype=np.float32))
 ok = pt.rast([ok_pred, ok_var])
-ok = pt.setNamesRast(ok, ["prediction", "variance"])
+ok = pt.set_names(ok, ["prediction", "variance"])
 ok = pt.mask(ok, ca)
 pt.plot(ok, figsize=(8, 4));
 ```
@@ -354,7 +354,7 @@ def idw_grid(target_xy, src_xy, src_y, k=None, idp=2.0):
 
 
 idw_pred = idw_grid(cell_xy, xy_aq, oz, idp=2.0)
-idp = pt.setValues(pt.deepcopy(r), idw_pred.astype(np.float32))
+idp = pt.set_values(pt.deepcopy(r), idw_pred.astype(np.float32))
 idp = pt.mask(idp, ca)
 pt.plot(idp, figsize=(5, 5));
 ```
@@ -367,7 +367,7 @@ from scipy.interpolate import RBFInterpolator
 tps_model = RBFInterpolator(xy_aq, oz, kernel="thin_plate_spline",
                             smoothing=0.0)
 tps_pred  = tps_model(cell_xy)
-tps = pt.setValues(pt.deepcopy(r), tps_pred.astype(np.float32))
+tps = pt.set_values(pt.deepcopy(r), tps_pred.astype(np.float32))
 tps = pt.mask(tps, ca)
 pt.plot(tps, figsize=(5, 5));
 ```
@@ -443,9 +443,9 @@ ens = ww[0] * pt.values(idp) + \
 And compare maps.
 
 ```{code-cell} python
-ens_r = pt.setValues(pt.deepcopy(r), ens.reshape(-1).astype(np.float32))
-s = pt.rast([idp, pt.subsetRast(ok, [0]), tps, ens_r])
-s = pt.setNamesRast(s, ["IDW", "OK", "TPS", "Ensemble"])
+ens_r = pt.set_values(pt.deepcopy(r), ens.reshape(-1).astype(np.float32))
+s = pt.rast([idp, pt.subset(ok, [0]), tps, ens_r])
+s = pt.set_names(s, ["IDW", "OK", "TPS", "Ensemble"])
 s = pt.mask(s, ca)
 pt.plot(s, figsize=(8, 6));
 ```
