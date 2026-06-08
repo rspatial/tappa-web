@@ -39,7 +39,7 @@ pt.points(crime, ax=ax, color="red", s=4, marker="+");
 A sorted table of the incidence of crime types.
 
 ```{code-cell} python
-crime_df = pt.vect_as_df(crime)
+crime_df = pt.vectAsDF(crime)
 tb = crime_df["CATEGORY"].value_counts(dropna=True).sort_values()
 tb
 ```
@@ -98,7 +98,7 @@ print(f"density:    {dens:.4g} points / unit²")
 Make a quadrat grid (1000-unit cells).
 
 ```{code-cell} python
-r = pt.rast(city, res=1000)
+r = pt.rast(city, resolution=1000)
 r = pt.rasterize(city, r)
 ax = pt.plot(r, figsize=(8, 4), legend=False)
 pt.points(crime, ax=ax, color="red", s=4);
@@ -218,7 +218,7 @@ The *F* function is computed from raster cell centres.
 ```{code-cell} python
 from scipy.spatial.distance import cdist
 
-p_xy = pt.crds(pt.as_points(r))
+p_xy = pt.crds(pt.asPoints(r))
 d2 = cdist(p_xy, xy)
 mind = d2.min(axis=1)
 
